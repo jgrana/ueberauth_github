@@ -87,6 +87,8 @@ defmodule Ueberauth.Strategy.Github do
   """
   def handle_request!(conn) do
     scopes = conn.params["scope"] || option(conn, :default_scope)
+
+    conn = put_private(conn, :redirect_url, conn.params["redirect_url"] || "/")
     send_redirect_uri = Keyword.get(options(conn), :send_redirect_uri, true)
 
     opts =
@@ -172,7 +174,7 @@ defmodule Ueberauth.Strategy.Github do
       nickname: user["login"],
       email: user["email"] || Enum.find(user["emails"] || [], &(&1["primary"]))["email"],
       location: user["location"],
-      image: user["avatar_url"],      
+      image: user["avatar_url"],
       urls: %{
         followers_url: user["followers_url"],
         avatar_url: user["avatar_url"],
