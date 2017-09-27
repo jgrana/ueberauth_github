@@ -88,7 +88,7 @@ defmodule Ueberauth.Strategy.Github do
   def handle_request!(conn) do
     scopes = conn.params["scope"] || option(conn, :default_scope)
 
-    conn = put_private(conn, :redirect_url, conn.params["redirect_url"] || "/")
+    conn = put_session(conn, :redirect_url, conn.params["redirect_url"] || "/")
     send_redirect_uri = Keyword.get(options(conn), :send_redirect_uri, true)
 
     opts =
